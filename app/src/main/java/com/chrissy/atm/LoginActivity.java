@@ -1,8 +1,12 @@
 package com.chrissy.atm;
 
+import static android.content.ContentValues.TAG;
+import static com.chrissy.atm.MainActivity.REQUEST_LOGIN;
 import static com.chrissy.atm.R.id.ed_account;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -33,9 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         if (a.equals("hi") && p.equals("1234")) {
             setResult(RESULT_OK);
             finish();//結束此activity,回到上一層。
-        }else {
-            setResult(MainActivity.REQUEST_LOGIN);
-            finish();
         }
 
     }
