@@ -48,19 +48,18 @@ public class LoginActivity extends AppCompatActivity {
         edAccount = findViewById(ed_account);
         edPwd = findViewById(R.id.ed_pwd);
         cbRemember = findViewById(R.id.cb_rem_account);
-        cbRemember.setChecked(getSharedPreferences("atm",MODE_PRIVATE)
-                .getBoolean("REMEMBER_ACCOUNT",false));
+        cbRemember.setChecked(getSharedPreferences("atm", MODE_PRIVATE)
+                .getBoolean("REMEMBER_ACCOUNT", false));
         // 傾聽核選元件勾選與否
         cbRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 getSharedPreferences("atm", MODE_PRIVATE)
                         .edit()
-                        .putBoolean("REMEMBER_ACCOUNT", isChecked)
+                        .putBoolean("REMEMBER_ACCOUNT", true)
                         .apply();
             }
         });
-
 
 
         // 如果上次成功登入，那帳號會直接出現在edAccount
@@ -85,21 +84,23 @@ public class LoginActivity extends AppCompatActivity {
                         // 登入成功
                         if (fbPwd != null && fbPwd.equals(pwd)) {
                             // 判斷是否有勾選記住帳號
-                            boolean remAccount = getSharedPreferences("ATM",MODE_PRIVATE)
-                                    .getBoolean("REMEMBER_ACCOUNT",false);
-
-                            Log.d(TAG, "----------------remAccount: "+remAccount);
+                            boolean remAccount = getSharedPreferences("atm", MODE_PRIVATE)
+                                    .getBoolean("REMEMBER_ACCOUNT", false);
+                            System.out.println("============boolean remAccount"+remAccount);
 
                             if (remAccount) {
                                 // 記住使用者帳號
-                                getSharedPreferences("atm", MODE_PRIVATE).edit()
+                                getSharedPreferences("atm", MODE_PRIVATE)
+                                        .edit()
                                         .putString("account", account)
                                         .apply();
-                            }else{
-                                // 如果沒有記住的話，先清掉喜好檔
-                                getSharedPreferences("atm", MODE_PRIVATE).edit()
+
+                            } else {
+                                // 如果沒有記住的話，先清掉喜好檔 account 的值
+                                getSharedPreferences("atm", MODE_PRIVATE)
+                                        .edit()
                                         .putString("account", "")
-                                        .apply();
+                                        .commit();
                             }
 
 
