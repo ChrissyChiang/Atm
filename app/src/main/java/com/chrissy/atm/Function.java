@@ -2,8 +2,8 @@ package com.chrissy.atm;
 
 public class Function {
 
-    String name;
-    int icon;
+    private String name;
+    private int icon;
 
     public Function() {
     }

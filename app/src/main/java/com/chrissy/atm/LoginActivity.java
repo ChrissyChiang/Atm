@@ -1,10 +1,12 @@
 package com.chrissy.atm;
 
+import static com.chrissy.atm.R.id.btn_cancel;
 import static com.chrissy.atm.R.id.ed_account;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -24,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edAccount;
     private EditText edPwd;
     private CheckBox cbRemember;
+    private Button btnCancel;
 
 
     @Override
@@ -43,6 +46,17 @@ public class LoginActivity extends AppCompatActivity {
 //                .getInt("LEVEL",0);
 //        Log.d(TAG, "onCreate: "+level);
 
+        findViews();
+
+
+        // 如果上次成功登入，那帳號會直接出現在edAccount
+        String accountPref = getSharedPreferences("atm", MODE_PRIVATE)
+                .getString("account", "");// 沒有值的話就不用顯示
+        edAccount.setText(accountPref);
+
+    }
+
+    private void findViews() {
         edAccount = findViewById(ed_account);
         edPwd = findViewById(R.id.ed_pwd);
         cbRemember = findViewById(R.id.cb_rem_account);
@@ -58,13 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                         .apply();
             }
         });
-
-
-        // 如果上次成功登入，那帳號會直接出現在edAccount
-        String accountPref = getSharedPreferences("atm", MODE_PRIVATE)
-                .getString("account", "");// 沒有值的話就不用顯示
-        edAccount.setText(accountPref);
-
+        btnCancel = findViewById(btn_cancel);
     }
 
 
@@ -84,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                             // 判斷是否有勾選記住帳號
                             boolean remAccount = getSharedPreferences("atm", MODE_PRIVATE)
                                     .getBoolean("REMEMBER_ACCOUNT", false);
-                            System.out.println("============boolean remAccount"+remAccount);
+                            System.out.println("============boolean remAccount" + remAccount);
 
                             if (remAccount) {
                                 // 記住使用者帳號
@@ -124,12 +132,29 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
+
+
                 });
     }
 
     public void cancel(View view) {
 
+        new AlertDialog.Builder(LoginActivity.this)
+                .setTitle("Exit")
+                .setMessage("Sure to Exit?")
+                .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }
