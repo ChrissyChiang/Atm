@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
+        android:text="tom"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
+        android:text="1111"
         app:layout_constraintStart_toStartOf="@+id/ed_account"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
