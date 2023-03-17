@@ -1,11 +1,9 @@
 package com.chrissy.atm;
 
-import static com.chrissy.atm.R.id.button;
 import static com.chrissy.atm.R.id.ed_account;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
