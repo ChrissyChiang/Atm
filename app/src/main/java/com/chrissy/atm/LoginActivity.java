@@ -1,10 +1,15 @@
 package com.chrissy.atm;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.chrissy.atm.R.id.btn_cancel;
 import static com.chrissy.atm.R.id.ed_account;
 
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +19,8 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final int REQUEST_CODE_CAMERA = 5;
     private EditText edAccount;
     private EditText edPwd;
     private CheckBox cbRemember;
@@ -34,26 +42,38 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-        // 創建喜好檔(練習)
-//        getSharedPreferences("atm",MODE_PRIVATE)
-//                .edit()
-//                .putInt("LEVEL",3) // 設定關卡第三關
-//                .putString("Name","Chrissy")
-//                .commit();
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if (permission == PERMISSION_GRANTED) {
+            takePhoto();
 
-        //讀取喜好檔(練習)
-//        int level = getSharedPreferences("atm",MODE_PRIVATE)
-//                .getInt("LEVEL",0);
-//        Log.d(TAG, "onCreate: "+level);
-
+        } else if(permission == PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(LoginActivity.this,
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+        }
         findViews();
-
 
         // 如果上次成功登入，那帳號會直接出現在edAccount
         String accountPref = getSharedPreferences("atm", MODE_PRIVATE)
                 .getString("account", "");// 沒有值的話就不用顯示
         edAccount.setText(accountPref);
 
+    }
+
+    private void takePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            if (grantResults[0] == PERMISSION_GRANTED) {
+                //頁面跳轉到拍照
+                takePhoto();
+            }
+        }
     }
 
     private void findViews() {
