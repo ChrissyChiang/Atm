@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1023046583405",
+    "firebase_url": "https://a-atm-3cd11-default-rtdb.firebaseio.com",
+    "project_id": "a-atm-3cd11",
+    "storage_bucket": "a-atm-3cd11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023046583405:android:d82276c7be295eb18eeb64",
+        "android_client_info": {
+          "package_name": "com.chrissy.atm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023046583405-2bf87rns54u5mkesmebb41u7r4r767vs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-8oy6qn4ChVI49SZ93-QVRFyKDMQChs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023046583405-2bf87rns54u5mkesmebb41u7r4r767vs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

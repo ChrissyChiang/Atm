@@ -7,8 +7,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
         findViews();
 
 
-
     }//end of onCreate
 
     protected void findViews() {
@@ -36,20 +41,20 @@ public class LoginActivity extends AppCompatActivity {
         cbRemAcc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                getSharedPreferences("ATM",MODE_PRIVATE).edit()
-                        .putBoolean("REMEMBER_ACCOUNT",isChecked)
+                getSharedPreferences("ATM", MODE_PRIVATE).edit()
+                        .putBoolean("REMEMBER_ACCOUNT", isChecked)
                         .commit();
             }
         });
 
         cbRemAcc.setChecked(
-                getSharedPreferences("ATM",MODE_PRIVATE)
-                        .getBoolean("REMEMBER_ACCOUNT",false)
+                getSharedPreferences("ATM", MODE_PRIVATE)
+                        .getBoolean("REMEMBER_ACCOUNT", false)
         );
 
 
-        String account = getSharedPreferences("ATM",MODE_PRIVATE)
-                .getString("ACCOUNT","");
+        String account = getSharedPreferences("ATM", MODE_PRIVATE)
+                .getString("ACCOUNT", "");
         edAcc.setText(account);
 
     }
@@ -60,34 +65,49 @@ public class LoginActivity extends AppCompatActivity {
         String userPwd = edPwd.getText().toString();
 
         // login success
+        FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(userAcc)
+                .child("password")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String dbPwd = (String) snapshot.getValue();
+                        if (userPwd.equals(dbPwd)) {
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
+                    }
+                });
 
-
-        if ("jack".equals(userAcc) && "1234".equals(userPwd)) {
-            setResult(RESULT_OK);
-            finish();
-        }
+//        if ("jack".equals(userAcc) && "1234".equals(userPwd)) {
+//            setResult(RESULT_OK);
+//            finish();
+//        }
 
         //save account after login
-        remember = getSharedPreferences("ATM",MODE_PRIVATE)
-                .getBoolean("REMEMBER_ACCOUNT",false);
+        remember = getSharedPreferences("ATM", MODE_PRIVATE)
+                .getBoolean("REMEMBER_ACCOUNT", false);
 
-        if (remember){
+        if (remember) {
             // Remember user Account
-            getSharedPreferences("ATM",MODE_PRIVATE).edit()
-                    .putString("ACCOUNT",userAcc)
+            getSharedPreferences("ATM", MODE_PRIVATE).edit()
+                    .putString("ACCOUNT", userAcc)
                     .commit();
-        }else {
+        } else {
             //Do not remember then clean the ACCOUNT in SharedPreferences
-            getSharedPreferences("ATM",MODE_PRIVATE).edit()
-                    .putString("ACCOUNT","")
+            getSharedPreferences("ATM", MODE_PRIVATE).edit()
+                    .putString("ACCOUNT", "")
                     .commit();
         }
 
 
     }
-
 
 
     //press cancel btn
