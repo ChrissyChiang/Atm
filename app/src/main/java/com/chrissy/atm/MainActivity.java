@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         IconAdapter adapter = new IconAdapter();
         recyclerView.setAdapter(adapter);
 
-
     }
 
     private void setUpFunctions() {
@@ -116,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.func_invesment:
                 break;
             case R.drawable.func_contacts:
+                Intent contactsIntent = new Intent(this, ContactActivity.class);
+                startActivity(contactsIntent);
                 break;
             case R.drawable.func_exit:
                 new AlertDialog.Builder(MainActivity.this)

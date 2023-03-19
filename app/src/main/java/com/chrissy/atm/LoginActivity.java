@@ -2,7 +2,6 @@ package com.chrissy.atm;
 
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.chrissy.atm.R.id.btn_cancel;
 import static com.chrissy.atm.R.id.ed_account;
 
 import android.Manifest;
@@ -11,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -29,12 +27,10 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    //    private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_CODE_CAMERA = 5;
     private EditText edAccount;
     private EditText edPwd;
-    private CheckBox cbRemember;
-    private Button btnCancel;
 
 
     @Override
@@ -46,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         if (permission == PERMISSION_GRANTED) {
             takePhoto();
 
-        } else if(permission == PERMISSION_DENIED) {
+        } else if (permission == PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(LoginActivity.this,
                     new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
         }
@@ -79,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     private void findViews() {
         edAccount = findViewById(ed_account);
         edPwd = findViewById(R.id.ed_pwd);
-        cbRemember = findViewById(R.id.cb_rem_account);
+        CheckBox cbRemember = findViewById(R.id.cb_rem_account);
         cbRemember.setChecked(getSharedPreferences("atm", MODE_PRIVATE)
                 .getBoolean("REMEMBER_ACCOUNT", false));
         // 傾聽核選元件勾選與否
@@ -92,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                         .apply();
             }
         });
-        btnCancel = findViewById(btn_cancel);
     }
 
 
@@ -112,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
                             // 判斷是否有勾選記住帳號
                             boolean remAccount = getSharedPreferences("atm", MODE_PRIVATE)
                                     .getBoolean("REMEMBER_ACCOUNT", false);
-                            System.out.println("============boolean remAccount" + remAccount);
 
                             if (remAccount) {
                                 // 記住使用者帳號
