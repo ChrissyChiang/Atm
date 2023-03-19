@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +28,7 @@ public class ContactActivity extends AppCompatActivity {
 
     private static final int REQUEST_CONTACT = 80;
     private static final String TAG = ContactActivity.class.getSimpleName();
+    private List<Contact> contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class ContactActivity extends AppCompatActivity {
         Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI
                 , null, null, null, null);
 
-        List<Contact> contactList = new ArrayList<>();
+        contactList = new ArrayList<>();
         while (cursor.moveToNext()) {
             //取得聯絡人ID
             int contactId = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.NAME_RAW_CONTACT_ID));
@@ -119,8 +124,8 @@ public class ContactActivity extends AppCompatActivity {
                 contactName = itemView.findViewById(android.R.id.text1);
                 contactPhone = itemView.findViewById(android.R.id.text2);
             }
-        }
-    }
+        }//end of ContactHolder
+    }//end of ContactAdapter
 
 
     @Override
@@ -133,5 +138,26 @@ public class ContactActivity extends AppCompatActivity {
                 readContacts();
             }
         }
-    }
+    }//end of onRequestPermissionsResult
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_contact, menu);
+        return super.onCreateOptionsMenu(menu);
+    }//end of onCreateOptionsMenu
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.action_upload) {
+            String accountShaPre = getSharedPreferences("atm", MODE_PRIVATE)
+                    .getString("account", null);
+            if (accountShaPre != null) {
+                FirebaseDatabase.getInstance().getReference("users")
+                        .child(accountShaPre).setValue(contactList);
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }//end of onOptionsItemSelected
 }
